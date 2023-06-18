@@ -5,14 +5,21 @@ app = Flask(__name__)
 
 
 def load_data(file_path):
-    """ Loads a JSON file """
+    """
+        Loads the database.json file into the application
+    :param file_path:
+    :return:
+    """
     with open(file_path, "r") as handle:
         return json.load(handle)
 
 
 @app.route('/')
 def index():
-    # add code here to fetch the job posts from a file
+    """
+        fetches the blog posts from a file and displays it in the index.html page
+    :return:
+    """
     blog_posts = load_data('blogposts_database.json')
     print(blog_posts)
     return render_template('index.html', posts=blog_posts)
@@ -20,8 +27,12 @@ def index():
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
+    """
+        Navigates to the add.html webpage to get info of the blogpost to add, updates the blogpost database
+        and renders the index.html web page to view the changes
+    :return:
+    """
     if request.method == 'POST':
-        # We will fill this in the next step
         title = request.form['title']
         author = request.form['author']
         content = request.form['content']
@@ -40,6 +51,11 @@ def add():
 
 @app.route('/delete/<int:post_id>')
 def delete(post_id):
+    """
+        Deletes a blogpost , updates the blogpost database and loads the index.html page to view the changes
+    :param post_id:
+    :return:
+    """
     blog_posts = load_data('blogposts_database.json')
     for count, post in enumerate(blog_posts):
         if post['id'] == post_id:
@@ -54,6 +70,12 @@ def delete(post_id):
 
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
 def update(post_id):
+    """
+        Navigates to the update.html webpage, gets the update info from user using a form,
+        updates the database with the new information and loads the index.html page to view the changes
+    :param post_id:
+    :return:
+    """
     # Fetch the blog posts from the JSON file
     blog_posts = load_data('blogposts_database.json')
     for post_data in blog_posts:
@@ -61,7 +83,6 @@ def update(post_id):
             post = post_data
 
     if post is None:
-        # Post not found
         return "Post not found", 404
 
     if request.method == 'POST':
@@ -87,6 +108,11 @@ def update(post_id):
 
 @app.route('/like/<int:post_id>')
 def like(post_id):
+    """
+       Increase the like count by 1, updates the blogpost database and loads the index.html page to view the changes
+    :param post_id:
+    :return:
+    """
     blog_posts = load_data('blogposts_database.json')
     for post_data in blog_posts:
         if post_data['id'] == post_id:
