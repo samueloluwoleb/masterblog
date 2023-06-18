@@ -17,7 +17,11 @@
             <p><em>Written by {{ post['author'] }}</em></p>
             <p> {{ post['content'] }} </p>
             <p> <a class = "btn_link" href="/update/{{post['id']}}"> <input type="button" value="Update" /> </a>  <a class = "btn_link" href="/delete/{{post['id']}}"> <input type="button" value="Delete" /> </a></p>
+            <div>
+                <p><a class = "btn_link" href="/like/{{post['id']}}"> <input type="button" value="Like - {{post['likes']}}"/> </a></p>
+            </div>
         </div>
+
     {% endfor %}
     <div>
         <p> <a href="/add"> Click here to add a blogpost </a></p>

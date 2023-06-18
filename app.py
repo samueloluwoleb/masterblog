@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import json
 
-
 app = Flask(__name__)
 
 
@@ -29,7 +28,7 @@ def add():
 
         blog_posts = load_data('blogposts_database.json')
         new_id = (blog_posts[-1]["id"]) + 1
-        new_post = {"id": new_id, "author": author, "title": title, "content": content}
+        new_post = {"id": new_id, "author": author, "title": title, "content": content, "likes": 0}
         blog_posts.append(new_post)
         json_data = json.dumps(blog_posts)
 
@@ -86,6 +85,20 @@ def update(post_id):
     return render_template('update.html', post=post)
 
 
+@app.route('/like/<int:post_id>')
+def like(post_id):
+    blog_posts = load_data('blogposts_database.json')
+    for post_data in blog_posts:
+        if post_data['id'] == post_id:
+            likes = post_data['likes'] + 1
+            post_data['likes'] = likes
+
+    json_data = json.dumps(blog_posts)
+
+    with open("blogposts_database.json", "w") as fileobj:
+        fileobj.write(json_data)
+    return redirect('/')
+
+
 if __name__ == '__main__':
     app.run()
-
